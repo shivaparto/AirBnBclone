@@ -1,6 +1,3 @@
-//This component is just an example for the challenge
-//It is not used by the app. Login is used instead.
-
 import React, { Component } from "react";
 import "./Login.css";
 import { connect } from "react-redux";
@@ -112,4 +109,3 @@ function mapDispatchToProps(dispatcher) {
 }
 
 export default connect(null, mapDispatchToProps)(Login);
-``;

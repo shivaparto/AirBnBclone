@@ -8,7 +8,7 @@ class City extends Component {
     const { cityName, price, image, id } = this.props.city;
     return (
       <div className="city col m12">
-        <Link to={`/city/${id}`}>
+        <Link to={`/city/${cityName}`}>
           <div className="image">
             <img src={image} />
           </div>

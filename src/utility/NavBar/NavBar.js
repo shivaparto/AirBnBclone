@@ -56,14 +56,13 @@ class NavBar extends Component {
                     >
                       Sign Up
                     </li>
-
                     <li
                       className="login-signup"
                       onClick={() => {
                         this.props.openModal("open", <Login />);
                       }}
                     >
-                      Log In
+                      Log in
                     </li>
                   </>
                 )}

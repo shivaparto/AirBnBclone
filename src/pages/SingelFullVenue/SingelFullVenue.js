@@ -1,7 +1,13 @@
 import React, { Component } from "react";
+
 import "./SingelFullVenue.css";
 import axios from "axios";
 import Point from "./Point";
+import openModal from "../../actions/openModal";
+import { bindActionCreators } from "redux";
+import Login from "../Login/Login";
+import { connect } from "react-redux";
+
 class SingelFullVenue extends Component {
   state = {
     singelVenue: {},
@@ -38,7 +44,6 @@ class SingelFullVenue extends Component {
     console.log("User wants to reserve!");
   };
   render() {
-    console.log(this.state.singelVenue);
     const sv = this.state.singelVenue;
     return (
       <div className="row single-venue">
@@ -79,9 +84,24 @@ class SingelFullVenue extends Component {
               </select>
             </div>
             <div className="col s12 center">
-              <button onChange={this.reserveNow} className="btn red accent-2">
-                Reserve
-              </button>
+              {this.props.auth.token ? (
+                <button onChange={this.reserveNow} className="btn red accent-2">
+                  Reserve
+                </button>
+              ) : (
+                <div>
+                  You must{" "}
+                  <span
+                    className="text-link"
+                    onClick={() => {
+                      this.props.openModal("open", <Login />);
+                    }}
+                  >
+                    Log in
+                  </span>{" "}
+                  to reserve
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -89,4 +109,15 @@ class SingelFullVenue extends Component {
     );
   }
 }
-export default SingelFullVenue;
+function mapStateToProps(state) {
+  return { auth: state.auth };
+}
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      openModal,
+    },
+    dispatch
+  );
+}
+export default connect(mapStateToProps, mapDispatchToProps)(SingelFullVenue);
