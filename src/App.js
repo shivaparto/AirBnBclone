@@ -7,6 +7,7 @@ import Home from "./pages/Home/Home";
 import SingelFullVenue from "./pages/SingelFullVenue/SingelFullVenue";
 import Modal from "./utility/Modal/Modal";
 import CityVenues from "./pages/CityVenues/CityVenues";
+
 import Test from "./Test";
 class App extends Component {
   render() {
@@ -16,7 +17,7 @@ class App extends Component {
         <Route exact path="/" component={Home} />
         <Route exact path="/venue/:vid" component={SingelFullVenue} />
         <Route exact path="/City/:cityName" component={CityVenues} />
-        <Route exact path="/" component={Modal} />
+        <Route path="/" component={Modal} />
         <Route exact path="/test" component={Test} />
       </Router>
     );

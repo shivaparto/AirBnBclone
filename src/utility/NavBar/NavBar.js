@@ -4,8 +4,9 @@ import "./NavBar.css";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import openModal from "../../actions/openModal";
-import logoutAction from "../../actions/logoutAction";
 import Login from "../../pages/Login/Login";
+import logoutAction from "../../actions/logoutAction";
+
 import SignUp from "../../pages/Login/SignUp";
 
 class NavBar extends Component {
@@ -58,9 +59,7 @@ class NavBar extends Component {
                     </li>
                     <li
                       className="login-signup"
-                      onClick={() => {
-                        this.props.openModal("open", <Login />);
-                      }}
+                      onClick={() => this.props.openModal("open", <Login />)}
                     >
                       Log in
                     </li>
