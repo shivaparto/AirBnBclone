@@ -7,7 +7,9 @@ import openModal from "../../actions/openModal";
 import { bindActionCreators } from "redux";
 import Login from "../Login/Login";
 import { connect } from "react-redux";
-
+import moment from "moment";
+import swal from "sweetalert";
+import loadScript from "../../utilityFunctions/loadScript";
 class SingelFullVenue extends Component {
   state = {
     singelVenue: {},
@@ -40,8 +42,65 @@ class SingelFullVenue extends Component {
   changeCheckOut = (e) => {
     this.setState({ checkOut: e.target.value });
   };
-  reserveNow = (e) => {
-    console.log("User wants to reserve!");
+  reserveNow = async (e) => {
+    const startDayMoment = moment(this.state.checkIn);
+    console.log(startDayMoment);
+    const endDayMoment = moment(this.state.checkOut);
+    console.log(endDayMoment);
+    const diffDays = endDayMoment.diff(startDayMoment, "days");
+    console.log(diffDays);
+    if (diffDays < 1) {
+      swal({
+        title: "check out date must be after check in date",
+        icon: "error",
+      });
+    } else if (isNaN(diffDays)) {
+      swal({
+        title: "please make sure your date are valid.",
+        icon: "error",
+      });
+    } else {
+      const pricePerNight = this.state.singelVenue.pricePerNight;
+      const totalPrice = pricePerNight * diffDays;
+      const scriptUrl = "https://js.stripe.com/v3";
+      const stripePublicKey =
+        "pk_test_5198HtPL5CfCPYJ3X8TTrO06ChWxotTw6Sm2el4WkYdrfN5Rh7vEuVguXyPrTezvm3ntblRX8TpjAHeMQfHkEpTA600waD2fMrT";
+      //Moving the below code to its own moudle
+      // await new Promise((resolve, reject) => {
+      //   const script = document.createElement("script");
+      //   script.type = "text/javascript";
+      //   script.src = scripturl;
+      //   script.onload = () => {
+      //     console.log("The script has loaded");
+      //     resolve();
+      //   };
+      //   document.getElementsByTagName("head")[0].appendChild(script);
+      //   console.log("The script has been added to the head!");
+      // });
+      // console.log("Lets run some Stripe");
+      await loadScript(scriptUrl);
+      const stripe = window.Stripe(stripePublicKey);
+      const stripeSessionUrl = `${window.apiHost}/payment/create-session`;
+      const data = {
+        venueData: this.state.singelVenue,
+        totalPrice,
+        diffDays,
+        pricePerNight,
+        checkIn: this.state.checkIn,
+        checkOut: this.state.checkOut,
+        token: this.props.auth.token,
+        currency: "USD",
+      };
+      const sessionVar = await axios.post(stripeSessionUrl, data);
+      // console.log(sessionVar.data);
+      stripe
+        .redirectToCheckout({
+          sessionId: sessionVar.data.id,
+        })
+        .then((result) => {
+          console.log(result);
+        });
+    }
   };
   render() {
     const sv = this.state.singelVenue;
@@ -85,7 +144,7 @@ class SingelFullVenue extends Component {
             </div>
             <div className="col s12 center">
               {this.props.auth.token ? (
-                <button onChange={this.reserveNow} className="btn red accent-2">
+                <button onClick={this.reserveNow} className="btn red accent-2">
                   Reserve
                 </button>
               ) : (

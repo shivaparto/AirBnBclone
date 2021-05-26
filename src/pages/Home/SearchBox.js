@@ -20,11 +20,15 @@ class SearchBox extends Component {
   changeGestes = (e) => {
     this.setState({ gestes: e.target.value });
   };
+  submitSearch = (e) => {
+    e.preventDefault();
+    this.props.history.push(`/search/${this.state.where}`);
+  };
   render() {
     return (
       <div className="home-search-box col m4">
         <h1>Book unique place to stay and things to do.</h1>
-        <form className="search-box-form">
+        <form onSubmit={this.submitSearch} className="search-box-form">
           <div className="col m12">
             <div className="form-label">where</div>
             <div className="input-field" id="where">

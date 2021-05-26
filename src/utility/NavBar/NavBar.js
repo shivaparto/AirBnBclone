@@ -42,6 +42,9 @@ class NavBar extends Component {
                 <li>
                   <Link to="/">Help</Link>
                 </li>
+                <li>
+                  <Link to="/account">Acoount</Link>
+                </li>
                 {this.props.auth.email ? (
                   <>
                     <li>Hello,{this.props.auth.email} </li>

@@ -68,7 +68,7 @@ class Home extends Component {
           <div className="row">
             <div className="home col s12">
               <div className="upper-fold">
-                <SearchBox />
+                <SearchBox history={this.props.history} />
               </div>
             </div>
           </div>
